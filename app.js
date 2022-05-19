@@ -3,6 +3,7 @@
 const express = require("express");
 const app = express();
 const logger = require("./logger");
+const authorize = require("./authorize");
 
 // app.get("/", logger, (req, res) => {
 //   res.send("<h1>Home Page</h1>");
@@ -13,10 +14,14 @@ const logger = require("./logger");
 // });
 
 // yestyo garyo vani k hunxa vani url ma get use gareko ma by default logger function banera define garxa so that we don't have to redefine
-app.use(logger);
+// app.use(logger);
 
 // yestyo garyo vani api pachadi suru vako link haru ma by default logger vanne function defune hunxa
 // app.use(/api/logger);
+
+// euta vanda dherai value use ma use garnu paryo vani array ma halnu parxa
+
+app.use([logger, authorize]);
 
 app.get("/", (req, res) => {
   res.send("<h1>Home Page</h1>");
