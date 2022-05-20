@@ -1,42 +1,38 @@
-// Setup middleware
-// methods. url, time
 const express = require("express");
+
 const app = express();
-const logger = require("./logger");
-const authorize = require("./authorize");
+let { people } = require("./data");
 
-// app.get("/", logger, (req, res) => {
-//   res.send("<h1>Home Page</h1>");
-// });
+// static
+app.use(express.static("./methods-public"));
 
-// app.get("/about", logger, (req, res) => {
-//   res.send("<h1>About Page</h1>");
-// });
+// middleware
+// yo use garesi hamro html ma name banera lakheko kura garu catch garna sakinxa yo tei html ko lagi ho
+app.use(express.urlencoded({ extended: false }));
 
-// yestyo garyo vani k hunxa vani url ma get use gareko ma by default logger function banera define garxa so that we don't have to redefine
-// app.use(logger);
+// Adding Json for JS to read our name file
+app.use(express.json());
 
-// yestyo garyo vani api pachadi suru vako link haru ma by default logger vanne function defune hunxa
-// app.use(/api/logger);
-
-// euta vanda dherai value use ma use garnu paryo vani array ma halnu parxa
-
-app.use([logger, authorize]);
-
-app.get("/", (req, res) => {
-  res.send("<h1>Home Page</h1>");
+app.get("/api/people", (req, res) => {
+  res.status(200).json({ success: true, data: people });
 });
 
-app.get("/about", (req, res) => {
-  res.send("<h1>About Page</h1>");
+app.post("/login", (req, res) => {
+  let { name } = req.body;
+  if (name) {
+    res.send(`Welcome ${name}`);
+  }
+  res.status(404).send("The FIeld is Empty");
 });
 
-app.get("/api/product", (req, res) => {
-  res.send("<h1>Product</h1>");
+app.post("/api/people", (req, res) => {
+  let { name } = req.body;
+  if (!name) {
+    res.status(404).json({ success: false, msg: "Please provide name value" });
+  }
+  res.status(201).json({ success: true, person: name });
 });
 
-app.get("/api/items", (req, res) => {
-  res.send("<h1>Items</h1>");
+app.listen(5000, () => {
+  console.log("Server is listing on 5000 port");
 });
-
-app.listen(5000, () => console.log("Server is Running on 5000 port"));
