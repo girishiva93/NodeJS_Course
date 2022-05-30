@@ -1,6 +1,6 @@
 const express = require("express");
 const app = express();
-const task = require("./routes/task");
+const tasks = require("./routes/tasks");
 const bodyParser = require("body-parser");
 
 const connectDB = require("./db/connect");
@@ -13,8 +13,14 @@ app.get("/hello", (req, res) => {
 // bodyParser tei body ko kunai pani data read garna lai kam lagxa
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
-app.use("/api/v1/tasks", task);
+// app.use("/api/v1/tasks", task);
 // app.use("/api/v1/tasks/:");
+
+// adding frontend project
+app.use(express.static("./public"));
+
+app.use("/api/v1/tasks", tasks);
+app.use(express.json());
 
 const port = 5000;
 
